@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include "ScalarConverter.hpp"
 
 
@@ -12,6 +13,10 @@ ScalarConverter::~ScalarConverter(){}
 
 void ScalarConverter::convert(std::string &str)
 {
+	long num = std::strtod(str.c_str(), NULL);
+
+
+
     std::cout << "char" << std::endl;
  
     std::cout << "int" << std::endl;
