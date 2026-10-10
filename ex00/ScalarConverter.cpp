@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <iomanip>
 #include "ScalarConverter.hpp"
 
 
@@ -11,18 +12,20 @@ ScalarConverter &ScalarConverter::operator=(const ScalarConverter&){return *this
 
 ScalarConverter::~ScalarConverter(){}
 
-void ScalarConverter::convert(std::string &str)
+void ScalarConverter::convert(const std::string &str)
 {
-	long num = std::strtod(str.c_str(), NULL);
+	double num = std::strtod(str.c_str(), NULL);
+	char c = std::atoi(str.c_str());
+	int n = c;
 
+	std::cout << num << std::endl;
 
-
-    std::cout << "char" << std::endl;
+    std::cout << "char: " << c <<std::endl;
  
-    std::cout << "int" << std::endl;
+    std::cout << "int: " << n << std::endl;
  
-    std::cout << "float" << std::endl;
+    std::cout << "float: " << std::fixed << std::setprecision(1) << num << "f" <<std::endl;
  
-    std::cout << "double" << std::endl;
+    std::cout << "double: " << std::fixed << std::setprecision(1) << num << std::endl;
 
 }

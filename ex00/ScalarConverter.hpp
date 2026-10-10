@@ -11,7 +11,7 @@ private:
     ~ScalarConverter();
 
 public:
-    static void convert(std::string &str);
+    static void convert(const std::string &str);
 };
 
 #endif
