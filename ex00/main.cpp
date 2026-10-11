@@ -13,9 +13,9 @@ int main(int ac, char *av[])
 
 	ScalarConverter::convert(str);
 
-	// float i = 42.0f;
+	float i = 42.f;
 
-	// std::cout << i << std::endl;
+	std::cout << i << std::endl;
 
 	return 0;
 }
