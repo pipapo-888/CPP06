@@ -2,7 +2,12 @@
 #include <cstdlib>
 #include <iomanip>
 #include <cctype>
+#include <climits>
+#include <cmath>
+#include <limits>
+#include <sstream>
 #include "ScalarConverter.hpp"
+#include "converterUtils.hpp"
 
 
 ScalarConverter::ScalarConverter(){}
@@ -10,82 +15,81 @@ ScalarConverter::ScalarConverter(const ScalarConverter&){}
 ScalarConverter &ScalarConverter::operator=(const ScalarConverter&){return *this;}
 ScalarConverter::~ScalarConverter(){}
 
-enum Type {
-	CHAR,
-	INT,
-	FLOAT,
-	DOUBLE,
-	INVALID
-};
-
-static bool isIntStr(const std::string &s)
+static std::string toCharStr(double d)
 {
-	size_t i = 0;
-	if (s[i] == '+' || s[i] == '-')
-		i++;
-	if (i == s.length())
-		return false;
-	for (; i < s.length(); i++)
-		if (!std::isdigit(s[i]))
-			return false;
-	return true;
-}
-
-static Type parseType(const std::string &str)
-{
-	if (str == "nanf" || str == "+inff" || str == "-inff")
-		return FLOAT;
-	if (str == "nan" || str == "+inf" || str == "-inf")
-		return DOUBLE;
-	if (str.length() == 3 && str[0] == '\'' && str[2] == '\'')
-		return CHAR;
-	if (str.length() == 1 && !std::isdigit(str[0]))
-		return CHAR;
-	if (isIntStr(str))
-		return INT;
-	
-
-	return INVALID;
-}
-
-
-
- static std::string toCharStr(int n)
- {
-	if (n < 0 || n > 127)
+	if (d < 0 || d > 127)
 		return ("impossible");
-	if (std::isprint(n))
-		return (std::string("'") + static_cast<char>(n) + std::string("'") );
+	if (std::isprint(static_cast<int>(d)))
+		return (std::string("'") + static_cast<char>(d) + std::string("'"));
 	return ("Non displayable");
- }
+}
+
+static std::string toIntStr(double d)
+{
+	if (d < INT_MIN || d > INT_MAX)
+		return ("impossible");
+	std::ostringstream oss;
+	oss << static_cast<int>(d);
+	return (oss.str());
+}
+
+static std::string toFloatingStr(double d)
+{
+	std::ostringstream oss;
+	if (d == std::numeric_limits<double>::infinity())
+		oss << "+inf";
+	else if (d == -std::numeric_limits<double>::infinity())
+		oss << "-inf";
+	else if (d == std::floor(d) && std::fabs(d) < 1e16)
+		oss << std::fixed << std::setprecision(1) << d;
+	else
+		oss << d;
+	return (oss.str());
+}
+
+static void printInvalid()
+{
+	std::cout << "char: impossible" << std::endl;
+	std::cout << "int: impossible" << std::endl;
+	std::cout << "float: impossible" << std::endl;
+	std::cout << "double: impossible" << std::endl;
+}
+
+static void printPseudo(const std::string &s, Type type)
+{
+	std::string base = (type == FLOAT) ? s.substr(0, s.length() - 1) : s;
+	std::cout << "char: impossible" << std::endl;
+	std::cout << "int: impossible" << std::endl;
+	std::cout << "float: " << base << "f" << std::endl;
+	std::cout << "double: " << base << std::endl;
+}
 
 void ScalarConverter::convert(const std::string &str)
 {
-	parseType(str);
-
-
-	char *end = NULL;
-	// bool fFlag = false;
-	if (str.length() == 1 && !std::isdigit(str[0]))
+	Type type = parseType(str);
+	if (type == INVALID)
 	{
-		// char c = str[0];
-	}
-	double num = std::strtod(str.c_str(), &end);
-	if (strlen(end) == 1 && (end[0] == 'f' || end[0] == 'F')) {
-		// fFlag = true;
-	} else if (end == str || *end != '\0') {
-		std::cout << "strtodに失敗しました\n";
+		printInvalid();
 		return ;
 	}
-		
+	if (isPseudo(str))
+	{
+		printPseudo(str, type);
+		return ;
+	}
 
-	char c = std::atoi(str.c_str());
-	int n = c;
+	double d;
+	if (type == CHAR)
+		d = (str.length() == 3) ? str[1] : str[0];
+	else
+		d = std::strtod(str.c_str(), NULL);
+	if (type == FLOAT)
+		d = static_cast<float>(d);
 
-    std::cout << "char: " << toCharStr(n) <<std::endl;
-    std::cout << "int: " << n << std::endl;
-    std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(num) << "f" <<std::endl;
-    std::cout << "double: " << std::fixed << std::setprecision(1) << num << std::endl;
+	std::cout << "char: " << toCharStr(d) << std::endl;
+	std::cout << "int: " << toIntStr(d) << std::endl;
+	std::cout << "float: " << toFloatingStr(static_cast<float>(d)) << "f" << std::endl;
+	std::cout << "double: " << toFloatingStr(d) << std::endl;
 }
 
 
