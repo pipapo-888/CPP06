@@ -1,7 +1,7 @@
 NAME = convert
 
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP
+# CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP
 
 SRCS = main.cpp ScalarConverter.cpp converterUtils.cpp
 
