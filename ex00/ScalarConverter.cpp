@@ -16,11 +16,11 @@ ScalarConverter::~ScalarConverter(){}
 
 static void printChar(double d)
 {
-	std::cout << "char: '";
+	std::cout << "char: ";
 	if (d < 0  || d > 127)
 		std::cout << "impossible";
 	else if (std::isprint(d))
-		std::cout << static_cast<char>(d);
+		std::cout << "\'" << static_cast<char>(d) << "\'";
 	else
 		std::cout << "Non displayable";
 
@@ -30,6 +30,13 @@ static void printChar(double d)
 static void printInt(double d)
 {
 	std::cout << "int: ";
+	if (d > INT_MAX || d < INT_MIN)
+		std::cout << "impossible";
+	else
+		std::cout << static_cast<int>(d);
+
+	std::cout << std::endl;
+
 }
 
 static void printFloating(double d)
@@ -42,11 +49,18 @@ static void printFloat(float f)
 	std::cout << "float: ";
 	printFloating(f);
 
+
+	std::cout << "f" << std::endl;
+
 }
 
 static void printDouble(double d)
 {
 	std::cout << "double: ";
+
+
+	std::cout << std::endl;
+
 }
 
 static void printInvalid()
