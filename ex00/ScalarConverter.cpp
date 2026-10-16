@@ -5,7 +5,6 @@
 #include <climits>
 #include <cmath>
 #include <limits>
-#include <sstream>
 #include "ScalarConverter.hpp"
 #include "converterUtils.hpp"
 
@@ -15,36 +14,39 @@ ScalarConverter::ScalarConverter(const ScalarConverter&){}
 ScalarConverter &ScalarConverter::operator=(const ScalarConverter&){return *this;}
 ScalarConverter::~ScalarConverter(){}
 
-static std::string toCharStr(double d)
+static void printChar(double d)
 {
-	if (d < 0 || d > 127)
-		return ("impossible");
-	if (std::isprint(static_cast<int>(d)))
-		return (std::string("'") + static_cast<char>(d) + std::string("'"));
-	return ("Non displayable");
-}
-
-static std::string toIntStr(double d)
-{
-	if (d < INT_MIN || d > INT_MAX)
-		return ("impossible");
-	std::ostringstream oss;
-	oss << static_cast<int>(d);
-	return (oss.str());
-}
-
-static std::string toFloatingStr(double d)
-{
-	std::ostringstream oss;
-	if (d == std::numeric_limits<double>::infinity())
-		oss << "+inf";
-	else if (d == -std::numeric_limits<double>::infinity())
-		oss << "-inf";
-	else if (d == std::floor(d) && std::fabs(d) < 1e16)
-		oss << std::fixed << std::setprecision(1) << d;
+	std::cout << "char: '";
+	if (d < 0  || d > 127)
+		std::cout << "impossible";
+	else if (std::isprint(d))
+		std::cout << static_cast<char>(d);
 	else
-		oss << d;
-	return (oss.str());
+		std::cout << "Non displayable";
+
+	std::cout << std::endl;
+}
+
+static void printInt(double d)
+{
+	std::cout << "int: ";
+}
+
+static void printFloating(double d)
+{
+	
+}
+
+static void printFloat(float f)
+{
+	std::cout << "float: ";
+	printFloating(f);
+
+}
+
+static void printDouble(double d)
+{
+	std::cout << "double: ";
 }
 
 static void printInvalid()
@@ -86,10 +88,10 @@ void ScalarConverter::convert(const std::string &str)
 	if (type == FLOAT)
 		d = static_cast<float>(d);
 
-	std::cout << "char: " << toCharStr(d) << std::endl;
-	std::cout << "int: " << toIntStr(d) << std::endl;
-	std::cout << "float: " << toFloatingStr(static_cast<float>(d)) << "f" << std::endl;
-	std::cout << "double: " << toFloatingStr(d) << std::endl;
+	printChar(d);
+	printInt(d);
+	printFloat(static_cast<float>(d));
+	printDouble(d);
 }
 
 
