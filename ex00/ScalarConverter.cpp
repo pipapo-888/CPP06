@@ -104,5 +104,3 @@ void ScalarConverter::convert(const std::string &str)
 	printDouble(d);
 }
 
-
-//todo ./convert "'3'" 　←これの対策するかどうか
