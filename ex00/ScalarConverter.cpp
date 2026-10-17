@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <iomanip>
+#include <sstream>
 #include <cctype>
 #include <climits>
 #include <cmath>
@@ -39,28 +40,23 @@ static void printInt(double d)
 
 }
 
-static void printFloating(double d)
+static std::string formatFloating(double d)
 {
-	
+	std::ostringstream oss;
+	if (d == std::floor(d))
+		oss << std::fixed << std::setprecision(1);
+	oss << d;
+	return oss.str();
 }
 
 static void printFloat(float f)
 {
-	std::cout << "float: ";
-	printFloating(f);
-
-
-	std::cout << "f" << std::endl;
-
+	std::cout << "float: " << formatFloating(f) << "f" << std::endl;
 }
 
 static void printDouble(double d)
 {
-	std::cout << "double: ";
-
-
-	std::cout << std::endl;
-
+	std::cout << "double: " << formatFloating(d) << std::endl;
 }
 
 static void printInvalid()

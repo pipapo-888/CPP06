@@ -9,13 +9,9 @@ int main(int ac, char *av[])
 		std::cout << "Wrong input\n";
 		return 1;
 	}
-	std::string str = static_cast<std::string>(av[1]);
 
+	std::string str = static_cast<std::string>(av[1]);
 	ScalarConverter::convert(str);
 
-	float i = 42.f;
-
-	std::cout << i << std::endl;
-
-	return 0;
+	return (0);
 }
