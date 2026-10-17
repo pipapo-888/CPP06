@@ -49,22 +49,9 @@ static std::string formatFloating(double d)
 	return oss.str();
 }
 
-static bool isFloatOverflow(double d)
+static void printFloat(float f)
 {
-	double a = std::fabs(d);
-	return a > std::numeric_limits<float>::max()
-		&& a != std::numeric_limits<double>::infinity();
-}
-
-static void printFloat(double d)
-{
-	// このタイミングでfloat max チェックをしようとおもってたんだけどすでにキャスとされてるからおそいのか
-	std::cout << "float: ";
-	if (isFloatOverflow(d))
-		std::cout << "impossible";
-	else
-		std::cout << formatFloating(static_cast<float>(d)) << "f";
-	std::cout << std::endl;
+	std::cout << "float: " << formatFloating(f) << "f" << std::endl;
 }
 
 static void printDouble(double d)
@@ -108,11 +95,14 @@ void ScalarConverter::convert(const std::string &str)
 		d = (str.length() == 3) ? str[1] : str[0];
 	else
 		d = std::strtod(str.c_str(), NULL);
-	if (type == FLOAT && !isFloatOverflow(d))
+	if (type == FLOAT)
 		d = static_cast<float>(d);
 
 	printChar(d);
 	printInt(d);
-	printFloat(d);
+	printFloat(static_cast<float>(d));
 	printDouble(d);
 }
+
+
+//todo ./convert "'3'" 　←これの対策するかどうか
